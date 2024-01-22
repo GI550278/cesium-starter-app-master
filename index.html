@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- Include the CesiumJS JavaScript and CSS files -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script type="module">
+    // Your access token can be found at: https://ion.cesium.com/tokens.
+    // Replace `your_access_token` with your Cesium ion access token.
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxYWJlYjI3Ni1lMTFiLTQzMjItOWIzZC1mZGMwMjI5MmVlOTMiLCJpZCI6MTc1NjcwLCJpYXQiOjE2OTg5NDE1Njl9.Cyjb5WjOnTHKRMyAiiB4gA2rsNvCNe5hGdNXGnbQwf0';
+
+    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+    const viewer = new Cesium.Viewer('cesiumContainer',
+
+        {
+            timeline: false,
+            animation: false,
+            // globe: false
+            //     terrain: Cesium.Terrain.fromWorldTerrain(),
+        }
+    );
+    //
+    // // Fly the camera to San Francisco at the given longitude, latitude, and height.
+    // viewer.camera.flyTo({
+    //     destination: Cesium.Cartesian3.fromDegrees(34.46734, 31.525013, 400),
+    //     orientation: {
+    //         heading: Cesium.Math.toRadians(0.0),
+    //         pitch: Cesium.Math.toRadians(-90.0),
+    //     }
+    // });
+    // console.log('>>>>', Cesium.Cartesian3.fromDegrees(34.46734, 31.525013, 400))
+    // viewer.camera.flyTo({
+    //     destination: {
+    //         x: 4493816.616313353,
+    //         y: 3076463.7329527773,
+    //         z: 3309255.2062301333
+    //     },
+    //
+    //     orientation: {
+    //         direction: {
+    //             x: -0.134664637786988,
+    //             y: -0.9843740786910871,
+    //             z: -0.11345972206370428
+    //         },
+    //         up: {
+    //             x: 0.7960641129314407,
+    //             y: -0.17565782853995476,
+    //             z: 0.5791599566400514
+    //         }
+    //     }
+    // })
+
+
+    // Add Cesium OSM Buildings, a global 3D buildings layer.
+    // const buildingTileset = await Cesium.createOsmBuildingsAsync();
+    // viewer.scene.primitives.add(buildingTileset);
+
+    try {
+        console.log(`start :)`);
+        const tileset = await Cesium.Cesium3DTileset.fromUrl('http://127.0.0.1:8000/Telem-Op-May16_Build_4_ppp/tileset.json')
+        console.log(`1 tileset ready: `, tileset);
+        tileset.readyPromise.then(function() {
+            viewer.zoomTo(tileset);
+        });
+        console.log(`2 tileset ready: `, tileset);
+
+
+        // const tileset = await Cesium.Cesium3DTileset.fromUrl(
+        //     // "/public/Example/3DTiles/DataSource_toGuy_best_real_0_0_0.json"
+        //     // "/public/Example/3DTiles/tileset_step1_binary.json"
+        //     // "/public/Example/3DTiles/DataSource_toGuyNew_best_real.json"
+        //     // "/public/Example/3DTiles/DataSource_toGuyNew_best_real_terrain.json"
+        //     // "/public/Example_2/3DTiles/DataSource_withTrees_best_semantic.json"
+        //     // "/public/Example_2/I3DM/tileset.json"
+        //     // "/public/Example_3/tilesat.json",
+        //     // "/public/toGuyNew/DataSource_toGuyNew_best_real.json",
+        //     // "/public/3DTiles/guy27102023_1/DataSource_guy27102023_1_best_real.json"
+        //     // "/public/3DTiles/guy27102023_1/tileset.json"
+        //     // "/public/tileset.json"
+        //     // "/public/DataSource_guy27102023_1_best_real.json"
+        //     // "/public/Example_10/tileset.json"
+        //     // "/public/tileset.json"
+        //     // "/public/tileset_v2.json"
+        //     // "/public/exp003/2710_1_draco/DataSource_2710_1_draco_best_real.json"
+        //     // "/public/Example_6/tileset.json"
+        //     // "/public/create_dtm/Example 004 - Trees/trees_2610_without/DataSource_trees_2610_without_best_real.json"
+        //     // "/public/create_dtm/Example 004 - Trees/trees_2610_without/I3DM/tileset.json"
+        //     // "/public/create_dtm/Example 004 - Trees/trees_2610_without/tileset.json"
+        //     //"/public/example004_trees/DataSource_trees_2610_without_best_real.json"
+        // // "/public/example004_trees-rewritten2/tileset.json"
+        // // "/public/example004_trees-deleteme2/tileset_bld.json"
+        // // "/public/example_04_trees_v4/tileset.json"
+        // "/public/shumar_v1/tileset.json"
+        // // "/public/unzip_copy_v2/tileset.json"
+        // // "/public/example004_bld-deleteme3/DataSource_withTrees_26without_best_real.json"
+        // );
+        viewer.scene.primitives.add(tileset);
+
+        console.log(`tileset ready: `, tileset);
+    } catch (error) {
+        console.error(`Error creating tileset: ${error}`);
+    }
+
+    window.show = function () {
+        console.log(viewer.camera)
+    }
+
+</script>
+</div>
+</body>
+</html>
