@@ -62,11 +62,9 @@
 
     try {
         console.log(`start :)`);
-        const tileset = await Cesium.Cesium3DTileset.fromUrl('http://127.0.0.1:8000/Telem-Op-May16_Build_4_ppp/tileset.json')
+        const tileset = await Cesium.Cesium3DTileset.fromUrl('http://localhost:8000/3dtiles/0/tileset.json')
         console.log(`1 tileset ready: `, tileset);
-        tileset.readyPromise.then(function() {
-            viewer.zoomTo(tileset);
-        });
+        viewer.zoomTo(tileset);
         console.log(`2 tileset ready: `, tileset);
 
 
